@@ -1,5 +1,9 @@
 package cn.com.twoke.game.main;
 
+import cn.com.twoke.game.entities.Player;
+
+import java.awt.*;
+
 public class Game implements Runnable
 {
     private GameWindow gameWindow;
@@ -9,15 +13,26 @@ public class Game implements Runnable
     private static final int FPS_SET = 120;
     private static final int UPS_SET = 200;
 
+    private Player player;
+
     public Game() {
-        gamePanel = new GamePanel();
-        gamePanel.requestFocus();
+        initClasses();
+        gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
+        gamePanel.requestFocus();
         startGameLoop();
     }
 
-    private void update() {
-        gamePanel.updateGame();
+    private void initClasses() {
+        player = new Player(200, 200);
+    }
+
+    public void update() {
+        player.update();
+    }
+
+    public void render(Graphics g) {
+        player.render(g);
     }
 
     @Override
@@ -65,4 +80,11 @@ public class Game implements Runnable
         gameThread.start();
     }
 
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    public void windowLostFocus() {
+        player.resetDitBoolean();
+    }
 }
