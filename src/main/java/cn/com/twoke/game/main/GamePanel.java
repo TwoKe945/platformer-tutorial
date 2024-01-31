@@ -14,15 +14,26 @@ public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
     private float xDelta = 100, yDelta = 100;
-    private BufferedImage bufferedImage, subImage;
+    private BufferedImage bufferedImage;
+    private BufferedImage[] idleAnimations;
+    private int aniTick = 0, aniIndex = 0, aniSpeed = 15;
 
     public GamePanel() {
         mouseInputs = new MouseInputs(this);
         importImage();
+        loadAnimations();
+
         setPanelSize();
         addKeyListener(new KeyboardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
+    }
+
+    private void loadAnimations() {
+        idleAnimations = new BufferedImage[5];
+        for (int i = 0; i < idleAnimations.length; i++) {
+            idleAnimations[i]  = bufferedImage.getSubimage(i * 64, 0 ,64, 40);
+        }
     }
 
     private void importImage() {
@@ -30,7 +41,13 @@ public class GamePanel extends JPanel {
         try {
             bufferedImage = ImageIO.read(is);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -57,9 +74,22 @@ public class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        subImage = bufferedImage.getSubimage(1 * 64,8 * 40, 64, 40);
-//        g.drawImage(bufferedImage.getSubimage(0,0, 64, 40), 0 , 0, null);
-        g.drawImage(subImage, (int) xDelta , (int) yDelta, 128, 80, null);
+        updateAnimationTick();
+
+        g.drawImage(idleAnimations[aniIndex], (int) xDelta , (int) yDelta, 128, 80, null);
+    }
+
+    private void updateAnimationTick() {
+        aniTick++;
+
+        if (aniTick >= aniSpeed) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= idleAnimations.length)
+                aniIndex = 0;
+        }
+
+
     }
 
 }
