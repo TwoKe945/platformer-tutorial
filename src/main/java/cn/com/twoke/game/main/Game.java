@@ -10,8 +10,9 @@ public class Game implements Runnable
 
     public Game() {
         gamePanel = new GamePanel();
-        gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus();
+        gameWindow = new GameWindow(gamePanel);
+        startGameLoop();
     }
 
     @Override
@@ -24,6 +25,7 @@ public class Game implements Runnable
             now = System.nanoTime();
             if(now - lastFrame >= timePerFrame) {
                 gamePanel.repaint();
+                gamePanel.requestFocus();
                 lastFrame = now;
                 frames++;
             }
@@ -35,8 +37,6 @@ public class Game implements Runnable
             }
         }
     }
-
-
 
     public void startGameLoop() {
         gameThread = new Thread(this);
