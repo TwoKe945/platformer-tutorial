@@ -1,12 +1,11 @@
 package cn.com.twoke.game.entities;
 
+import cn.com.twoke.game.main.Game;
+import cn.com.twoke.game.utils.HelpMethods;
 import cn.com.twoke.game.utils.LoadSave;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static cn.com.twoke.game.utils.Constants.PlayerConstants.*;
 
@@ -18,20 +17,24 @@ public class Player extends Entity {
     private boolean moving = false, attacking = false;
     private boolean left, up, right, down;
     private float playerSpeed = 2.0f;
-
-    public Player(float x, float y) {
-        super(x, y);
+    private int[][] levelData;
+    private float xDrawOffset = 21 * Game.SCALE;
+    private float yDrawOffset = 4 * Game.SCALE;
+    public Player(float x, float y, int width, int height) {
+        super(x, y, width, height);
         loadAnimations();
+        initHitBox(x, y, 20 * Game.SCALE, 28 * Game.SCALE);
     }
 
     public void update() {
+        updatePos();
         updateAnimationTick();
         setAnimation();
-        updatePos();
     }
 
     public void render(Graphics g) {
-        g.drawImage(animations[playerAction][aniIndex], (int) x , (int) y, 128, 80, null);
+        g.drawImage(animations[playerAction][aniIndex], (int) (hitBox.x - xDrawOffset) , (int) (hitBox.y - yDrawOffset), width, height, null);
+        drawHitBox(g);
     }
 
     public void setAnimation() {
@@ -51,13 +54,17 @@ public class Player extends Entity {
         }
     }
 
+
+    public void  loadLevelData(int[][] levelData) {
+        this.levelData = levelData;
+    }
     private void resetAniTick() {
         aniTick = 0;
         aniIndex = 0;
     }
 
     private void loadAnimations() {
-        BufferedImage image = LoadSave.getSpriteAtlas(LoadSave.PLAYER_ATLAS);
+        BufferedImage image = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
         animations = new BufferedImage[9][6];
         for (int j = 0; j < animations.length; j++) {
             for (int i = 0; i < animations[j].length; i++) {
@@ -68,21 +75,35 @@ public class Player extends Entity {
 
     private void updatePos() {
         moving = false;
+        if (!left && !up && !right && !down)
+            return;
+
+        float xSpeed = 0, ySpeed = 0;
+
         if (left && !right) {
-            x -= playerSpeed;
-            moving = true;
+            xSpeed = -playerSpeed;
         } else if (right && !left) {
-            x += playerSpeed;
-            moving = true;
+            xSpeed = playerSpeed;
+        }
+        if (up && !down) {
+            ySpeed = -playerSpeed;
+        } else if (down && !up) {
+            ySpeed = playerSpeed;
         }
 
-        if (up && !down) {
-            y -= playerSpeed;
-            moving = true;
-        } else if (down && !up) {
-            y += playerSpeed;
-            moving = true;
+//        if (HelpMethods.CanMoveHere(x+xSpeed, y+ySpeed, width, height, levelData)) {
+//            this.x += xSpeed;
+//            this.y += ySpeed;
+//            this.moving = true;
+//        }
+        if (HelpMethods.CanMoveHere(hitBox.x+xSpeed, hitBox.y+ySpeed, hitBox.width, hitBox.height, levelData)) {
+            hitBox.x += xSpeed;
+            hitBox.y += ySpeed;
+            this.moving = true;
         }
+
+
+
     }
 
     private void updateAnimationTick() {

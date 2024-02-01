@@ -2,7 +2,6 @@ package cn.com.twoke.game.levels;
 
 import cn.com.twoke.game.main.Game;
 import cn.com.twoke.game.utils.LoadSave;
-import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,11 +15,11 @@ public class LevelManager {
     public LevelManager(Game game) {
         this.game = game;
         importOutsideSprites();
-        levelOne = new Level(LoadSave.getLevelData());
+        levelOne = new Level(LoadSave.GetLevelData());
     }
 
     private void importOutsideSprites() {
-        BufferedImage tempImage = LoadSave.getSpriteAtlas(LoadSave.LEVEL_ATLAS);
+        BufferedImage tempImage = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ATLAS);
         levelSprite = new BufferedImage[48];
         for (int j = 0; j < 4; j++) {
             for (int i = 0; i < 12; i++) {
@@ -45,4 +44,7 @@ public class LevelManager {
     }
 
 
+    public Level getCurrentLevel() {
+        return levelOne;
+    }
 }

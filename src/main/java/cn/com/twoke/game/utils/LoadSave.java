@@ -15,7 +15,7 @@ public class LoadSave {
     public static final String LEVEL_ATLAS = "outside_sprites.png";
     public static final String LEVEL_ONE_ATLAS = "level_one_data.png";
 
-    public static BufferedImage getSpriteAtlas(String spriteFileName) {
+    public static BufferedImage GetSpriteAtlas(String spriteFileName) {
         BufferedImage image = null;
         InputStream is = LoadSave.class.getResourceAsStream("/" + spriteFileName);
         try {
@@ -33,9 +33,9 @@ public class LoadSave {
     }
 
 
-    public static int[][] getLevelData() {
+    public static int[][] GetLevelData() {
         int[][] levelData = new int[Game.TILES_IN_HEIGHT][Game.TILES_IN_WIDTH];
-        BufferedImage img = getSpriteAtlas(LEVEL_ONE_ATLAS);
+        BufferedImage img = GetSpriteAtlas(LEVEL_ONE_ATLAS);
         for (int j = 0; j < img.getHeight(); j++) {
             for (int i = 0; i < img.getWidth(); i++) {
                 Color color = new Color(img.getRGB(i,j));
