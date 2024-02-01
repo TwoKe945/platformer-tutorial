@@ -22,6 +22,18 @@ public interface Constants {
             int SOUND_SIZE_DEFAULT = 42;
             int SOUND_SIZE = (int)(SOUND_SIZE_DEFAULT * Game.SCALE);
 
+
+            int URM_SIZE_DEFAULT = 56;
+            int URM_SIZE = (int)(URM_SIZE_DEFAULT * Game.SCALE);
+
+
+            int VOLUME_DEFAULT_WIDTH = 28;
+            int VOLUME_DEFAULT_HEIGHT = 44;
+            int VOLUME_SLIDER_DEFAULT_WIDTH = 215;
+
+            int VOLUME_HEIGHT = (int) (Game.SCALE * VOLUME_DEFAULT_HEIGHT);
+            int VOLUME_WIDTH  =  (int) (Game.SCALE * VOLUME_DEFAULT_WIDTH);
+            int VOLUME_SLIDER_WIDTH =  (int) (Game.SCALE * VOLUME_SLIDER_DEFAULT_WIDTH);
         }
 
     }
