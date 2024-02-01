@@ -31,12 +31,7 @@ public abstract class Entity {
         }
     }
 
-    public void render(Graphics g) {
-        doRender(g);
-        drawHitBox(g);
-    }
-
-    protected abstract void doRender(Graphics g);
+    public abstract void render(Graphics g);
 
     public void updateHisBox() {
         hitBox.x = x;

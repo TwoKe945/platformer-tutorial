@@ -33,14 +33,21 @@ public class Player extends Entity {
         initHitBox(x, y, (int)(20 * Game.SCALE), (int) (27 * Game.SCALE));
     }
 
+    @Override
+    public void render(Graphics g) {
+        g.drawImage(animations[playerAction][aniIndex], (int) (hitBox.x - xDrawOffset), (int) (hitBox.y - yDrawOffset), width, height, null);
+        drawHitBox(g);
+    }
+
     public void update() {
         updatePos();
         updateAnimationTick();
         setAnimation();
     }
 
-    public void doRender(Graphics g) {
-        g.drawImage(animations[playerAction][aniIndex], (int) (hitBox.x - xDrawOffset) , (int) (hitBox.y - yDrawOffset), width, height, null);
+    public void render(Graphics g, int lvlOffset) {
+        g.drawImage(animations[playerAction][aniIndex], (int) (hitBox.x - xDrawOffset) - lvlOffset , (int) (hitBox.y - yDrawOffset), width, height, null);
+        drawHitBox(g);
     }
 
     public void setAnimation() {
@@ -94,8 +101,11 @@ public class Player extends Entity {
         moving = false;
         if (jump)
             jump();
-        if (!left && !right && !inAir)
-            return;
+//        if (!left && !right && !inAir)
+//            return;
+        if (!inAir)
+            if (!right && !left || (left && right))
+                return;
 
         float xSpeed = 0;
 
