@@ -15,15 +15,22 @@ public class Player extends Entity {
     private int aniTick = 0, aniIndex = 0, aniSpeed = 15;
     private int playerAction = IDLE;
     private boolean moving = false, attacking = false;
-    private boolean left, up, right, down;
+    private boolean left, up, right, down, jump;
     private float playerSpeed = 2.0f;
     private int[][] levelData;
     private float xDrawOffset = 21 * Game.SCALE;
     private float yDrawOffset = 4 * Game.SCALE;
+
+    private float airSpeed = 0f;
+    private float gravity = 0.04f * Game.SCALE;
+    private float jumpSpeed = -2.25f * Game.SCALE;
+    private float fallSpeedAfterCollision = 0.5f * Game.SCALE;
+    private boolean inAir = false;
+
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
         loadAnimations();
-        initHitBox(x, y, 20 * Game.SCALE, 28 * Game.SCALE);
+        initHitBox(x, y, 20 * Game.SCALE, 27 * Game.SCALE);
     }
 
     public void update() {
@@ -32,9 +39,8 @@ public class Player extends Entity {
         setAnimation();
     }
 
-    public void render(Graphics g) {
+    public void doRender(Graphics g) {
         g.drawImage(animations[playerAction][aniIndex], (int) (hitBox.x - xDrawOffset) , (int) (hitBox.y - yDrawOffset), width, height, null);
-        drawHitBox(g);
     }
 
     public void setAnimation() {
@@ -44,6 +50,14 @@ public class Player extends Entity {
             playerAction = RUNNING;
         } else {
             playerAction = IDLE;
+        }
+
+        if (inAir) {
+            if (airSpeed < 0) {
+                playerAction = JUMP;
+            } else {
+                playerAction = FALLING;
+            }
         }
 
         if (attacking)
@@ -57,6 +71,9 @@ public class Player extends Entity {
 
     public void  loadLevelData(int[][] levelData) {
         this.levelData = levelData;
+        if (!HelpMethods.IsEntityOnFloor(hitBox, levelData)) {
+            this.inAir = true;
+        }
     }
     private void resetAniTick() {
         aniTick = 0;
@@ -75,35 +92,62 @@ public class Player extends Entity {
 
     private void updatePos() {
         moving = false;
-        if (!left && !up && !right && !down)
+        if (jump)
+            jump();
+        if (!left && !right && !inAir)
             return;
 
-        float xSpeed = 0, ySpeed = 0;
+        float xSpeed = 0;
 
-        if (left && !right) {
-            xSpeed = -playerSpeed;
-        } else if (right && !left) {
-            xSpeed = playerSpeed;
-        }
-        if (up && !down) {
-            ySpeed = -playerSpeed;
-        } else if (down && !up) {
-            ySpeed = playerSpeed;
+        if (left)
+            xSpeed -= playerSpeed;
+
+        if (right)
+            xSpeed += playerSpeed;
+
+        if (!inAir)
+            if (!HelpMethods.IsEntityOnFloor(hitBox, levelData))
+                inAir = true;
+        if (inAir) {
+            if (HelpMethods.CanMoveHere(hitBox.x, hitBox.y+airSpeed, hitBox.width, hitBox.height, levelData)) {
+                hitBox.y += airSpeed;
+                airSpeed += gravity;
+                updateXPos(xSpeed);
+            } else {
+                hitBox.y = HelpMethods.GetEntityYPosNextToWall(hitBox, airSpeed);
+                if (airSpeed > 0) {
+                    resetInAir();
+                } else {
+                    airSpeed = fallSpeedAfterCollision;
+                }
+                updateXPos(xSpeed);
+            }
+        } else {
+            updateXPos(xSpeed);
         }
 
-//        if (HelpMethods.CanMoveHere(x+xSpeed, y+ySpeed, width, height, levelData)) {
-//            this.x += xSpeed;
-//            this.y += ySpeed;
-//            this.moving = true;
-//        }
-        if (HelpMethods.CanMoveHere(hitBox.x+xSpeed, hitBox.y+ySpeed, hitBox.width, hitBox.height, levelData)) {
+        moving = true;
+
+    }
+
+    private void jump() {
+        if (inAir)
+            return;
+        inAir = true;
+        airSpeed = jumpSpeed;
+    }
+
+    private void resetInAir() {
+        inAir = false;
+        airSpeed = 0;
+    }
+
+    private void updateXPos(float xSpeed) {
+        if (HelpMethods.CanMoveHere(hitBox.x+xSpeed, hitBox.y, hitBox.width, hitBox.height, levelData)) {
             hitBox.x += xSpeed;
-            hitBox.y += ySpeed;
-            this.moving = true;
+        } else {
+            hitBox.x = HelpMethods.GetEntityXPosNextToWall(hitBox, xSpeed);
         }
-
-
-
     }
 
     private void updateAnimationTick() {
@@ -158,5 +202,9 @@ public class Player extends Entity {
     }
     public void setAttack(boolean attacking) {
         this.attacking = attacking;
+    }
+
+    public void setJump(boolean jump) {
+        this.jump = jump;
     }
 }

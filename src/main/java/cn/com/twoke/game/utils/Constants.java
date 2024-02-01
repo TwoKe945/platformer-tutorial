@@ -2,6 +2,9 @@ package cn.com.twoke.game.utils;
 
 public interface Constants {
 
+
+    boolean DEBUG_HIT_BOX = false;
+
     interface Direction {
         int LEFT = 0;
         int UP = 1;
