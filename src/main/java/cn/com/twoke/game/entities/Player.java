@@ -1,5 +1,7 @@
 package cn.com.twoke.game.entities;
 
+import cn.com.twoke.game.utils.LoadSave;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -29,7 +31,7 @@ public class Player extends Entity {
     }
 
     public void render(Graphics g) {
-        g.drawImage(animations[playerAction][aniIndex], (int) x , (int) y, 256, 160, null);
+        g.drawImage(animations[playerAction][aniIndex], (int) x , (int) y, 128, 80, null);
     }
 
     public void setAnimation() {
@@ -55,24 +57,11 @@ public class Player extends Entity {
     }
 
     private void loadAnimations() {
-        InputStream is = getClass().getResourceAsStream("/img.png");
-        try {
-            BufferedImage image = ImageIO.read(is);
-
-            animations = new BufferedImage[9][6];
-
-            for (int j = 0; j < animations.length; j++) {
-                for (int i = 0; i < animations[j].length; i++) {
-                    animations[j][i]  = image.getSubimage(i * 64, j * 40 ,64, 40);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        BufferedImage image = LoadSave.getSpriteAtlas(LoadSave.PLAYER_ATLAS);
+        animations = new BufferedImage[9][6];
+        for (int j = 0; j < animations.length; j++) {
+            for (int i = 0; i < animations[j].length; i++) {
+                animations[j][i]  = image.getSubimage(i * 64, j * 40 ,64, 40);
             }
         }
     }
