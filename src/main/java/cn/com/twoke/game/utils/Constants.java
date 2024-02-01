@@ -1,10 +1,23 @@
 package cn.com.twoke.game.utils;
 
+import cn.com.twoke.game.main.Game;
+
 public interface Constants {
 
 
     boolean DEBUG_HIT_BOX = false;
 
+
+    interface UI {
+
+        interface Buttons {
+            int B_WIDTH_DEFAULT = 140;
+            int B_HEIGHT_DEFAULT = 56;
+            int B_WIDTH = (int)(B_WIDTH_DEFAULT * Game.SCALE);
+            int B_HEIGHT = (int)(B_HEIGHT_DEFAULT * Game.SCALE);
+        }
+
+    }
     interface Direction {
         int LEFT = 0;
         int UP = 1;
