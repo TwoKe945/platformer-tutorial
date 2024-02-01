@@ -1,5 +1,6 @@
 package cn.com.twoke.game.inputs;
 
+import cn.com.twoke.game.gamestates.GameState;
 import cn.com.twoke.game.main.GamePanel;
 
 import java.awt.event.MouseEvent;
@@ -15,8 +16,13 @@ public class MouseInputs implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1) {
-            gamePanel.getGame().getPlayer().setAttack(true);
+        switch (GameState.currentState) {
+            case MENU:
+                gamePanel.getGame().getMenu().mouseClicked(e);
+                break;
+            case PLAYING:
+                gamePanel.getGame().getPlaying().mouseClicked(e);
+                break;
         }
     }
 

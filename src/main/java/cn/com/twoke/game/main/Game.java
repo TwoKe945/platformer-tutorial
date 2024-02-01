@@ -1,6 +1,9 @@
 package cn.com.twoke.game.main;
 
 import cn.com.twoke.game.entities.Player;
+import cn.com.twoke.game.gamestates.GameState;
+import cn.com.twoke.game.gamestates.Menu;
+import cn.com.twoke.game.gamestates.Playing;
 import cn.com.twoke.game.levels.LevelManager;
 
 import java.awt.*;
@@ -9,13 +12,13 @@ public class Game implements Runnable
 {
     private GameWindow gameWindow;
     private GamePanel gamePanel;
-
     private Thread gameThread;
-    private Player player;
-    private LevelManager levelManager;
-
     public static final int FPS_SET = 120;
     public static final int UPS_SET = 200;
+
+    private Playing playing;
+    private Menu menu;
+
     public final static  int TILES_DEFAULT_SIZE = 32;
     public final static  float SCALE = 2f;
     public final static  int TILES_IN_WIDTH = 26;
@@ -34,19 +37,30 @@ public class Game implements Runnable
     }
 
     private void initClasses() {
-        player = new Player(200, 200, 128, 80);
-        levelManager = new LevelManager(this);
-        player.loadLevelData(levelManager.getCurrentLevel().getLevelData());
+        this.menu = new Menu(this);
+        this.playing = new Playing(this);
     }
 
     public void update() {
-        player.update();
-        levelManager.update();
+        switch (GameState.currentState) {
+            case MENU:
+                this.menu.update();
+                break;
+            case PLAYING:
+                this.playing.update();
+                break;
+        }
     }
 
     public void render(Graphics g) {
-        levelManager.draw(g);
-        player.render(g);
+        switch (GameState.currentState) {
+            case MENU:
+                this.menu.draw(g);
+                break;
+            case PLAYING:
+                this.playing.draw(g);
+                break;
+        }
     }
 
     @Override
@@ -94,11 +108,17 @@ public class Game implements Runnable
         gameThread.start();
     }
 
-    public Player getPlayer() {
-        return this.player;
+    public void windowLostFocus() {
+        if (GameState.currentState == GameState.PLAYING) {
+            playing.windowLostFocus();
+        }
     }
 
-    public void windowLostFocus() {
-        player.resetDitBoolean();
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Playing getPlaying() {
+        return playing;
     }
 }
