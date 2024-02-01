@@ -2,6 +2,7 @@ package cn.com.twoke.game.entities;
 
 import cn.com.twoke.game.main.Game;
 import cn.com.twoke.game.utils.Constants;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 
 import java.awt.geom.Rectangle2D;
@@ -23,10 +24,43 @@ public abstract class Enemy extends Entity{
     protected int tileY;
     protected float attackDistance = Game.TILES_SIZE;
 
+    protected int maxHealth;
+    protected int currentHealth;
+
+    protected boolean active = true;
+    protected boolean attackChecked;
     public Enemy(float x, float y, int width, int height, int enemyType) {
         super(x, y, width, height);
         this.enemyType = enemyType;
         initHitBox(x, y, width, height);
+        maxHealth = GetMaxHealth(enemyType);
+        currentHealth = maxHealth;
+    }
+
+    public void hurt(int amount) {
+        currentHealth -= amount;
+        if (currentHealth <= 0) {
+            newState(DEAD);
+        } else {
+            newState(HIT);
+        }
+    }
+
+    public void resetEnemy() {
+        hitBox.x = x;
+        hitBox.y = y;
+        firstUpdate = true;
+        currentHealth = maxHealth;
+        newState(IDLE);
+        active = true;
+        fallSpeed = 0;
+    }
+
+    protected void checkEnemyHit(Rectangle2D.Float attackBox,Player player) {
+        if (attackBox.intersects(player.hitBox)) {
+            player.changeHealth(-GetMaxHealth(enemyType));
+        }
+        attackChecked = true;
     }
 
     protected void updateAnimationTick() {
@@ -36,8 +70,11 @@ public abstract class Enemy extends Entity{
             aniIndex++;
             if (aniIndex >= GetSpriteAmount(enemyType, enemyState)) {
                 aniIndex = 0;
-                if (enemyState == ATTACK) {
+
+                if (enemyState == ATTACK || enemyState == HIT) {
                     enemyState = IDLE;
+                }else if (enemyState == DEAD) {
+                    active = false;
                 }
             }
         }
@@ -59,6 +96,10 @@ public abstract class Enemy extends Entity{
             hitBox.y = GetEntityYPosNextToWall(hitBox, fallSpeed);
             tileY = (int)( hitBox.y / Game.TILES_SIZE);
         }
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     protected void move(int[][] lvlData) {

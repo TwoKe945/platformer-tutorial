@@ -35,6 +35,7 @@ public class LoadSave {
 
     // 敌人
     public static final String CRABBY_SPRITE = "crabby_sprite.png";
+    public static final String HEALTH_POWER_BAR = "health_power_bar.png";
 
 
 
