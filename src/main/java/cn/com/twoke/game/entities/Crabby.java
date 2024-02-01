@@ -5,12 +5,9 @@ import cn.com.twoke.game.utils.Constants;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.Random;
 
-import static cn.com.twoke.game.utils.Constants.Direction.LEFT;
 import static cn.com.twoke.game.utils.Constants.Direction.RIGHT;
 import static cn.com.twoke.game.utils.Constants.EnemyConstants.*;
-import static cn.com.twoke.game.utils.HelpMethods.*;
 
 public class Crabby extends Enemy{
     // AttackBox
@@ -73,7 +70,7 @@ public class Crabby extends Enemy{
     }
 
     public void drawAttackBox(Graphics g, int xLvlOffset) {
-        if (Constants.DEBUG_HIT_BOX) {
+        if (Constants.ENABLE_DEBUG_BOX) {
             g.setColor(Color.RED);
             g.drawRect((int) attackBox.x - xLvlOffset, (int) attackBox.y,(int) attackBox.width, (int)attackBox.height);
         }

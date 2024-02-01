@@ -111,7 +111,7 @@ public class Player extends Entity {
     }
 
     private void drawAttackBox(Graphics g, int lvlOffset) {
-        if (Constants.DEBUG_HIT_BOX) {
+        if (Constants.ENABLE_DEBUG_BOX) {
             g.setColor(Color.RED);
             g.drawRect((int) attackBox.x - lvlOffset, (int) attackBox.y,(int) attackBox.width, (int)attackBox.height);
         }

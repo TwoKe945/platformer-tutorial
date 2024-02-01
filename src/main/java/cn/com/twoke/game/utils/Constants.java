@@ -5,7 +5,7 @@ import cn.com.twoke.game.main.Game;
 public interface Constants {
 
 
-    boolean DEBUG_HIT_BOX = true;
+    boolean ENABLE_DEBUG_BOX = false;
 
 
     interface Environment {

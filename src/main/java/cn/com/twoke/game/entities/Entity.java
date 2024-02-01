@@ -1,7 +1,6 @@
 package cn.com.twoke.game.entities;
 
 import cn.com.twoke.game.utils.Constants;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -25,7 +24,7 @@ public abstract class Entity {
     }
 
     public void drawHitBox(Graphics g, int lvlOffset) {
-        if (Constants.DEBUG_HIT_BOX) {
+        if (Constants.ENABLE_DEBUG_BOX) {
             g.setColor(Color.PINK);
             g.drawRect((int) hitBox.x - lvlOffset, (int) hitBox.y,(int) hitBox.width, (int)hitBox.height);
         }

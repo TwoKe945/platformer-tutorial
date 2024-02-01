@@ -34,6 +34,9 @@ public final class HelpMethods {
     }
 
     public static boolean IsFloor(Rectangle2D.Float hitBox, float xSpeed, int[][] lvlData) {
+        if (xSpeed > 0) {
+            return IsSolid(hitBox.x + hitBox.width +xSpeed, hitBox.y + hitBox.height + 1, lvlData);
+        }
         return IsSolid(hitBox.x +xSpeed, hitBox.y + hitBox.height + 1, lvlData);
     }
 
