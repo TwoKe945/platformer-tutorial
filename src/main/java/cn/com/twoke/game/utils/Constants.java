@@ -8,6 +8,17 @@ public interface Constants {
     boolean DEBUG_HIT_BOX = false;
 
 
+    interface Environment {
+        int BIG_CLOUD_WIDTH_DEFAULT = 448;
+        int BIG_CLOUD_HEIGHT_DEFAULT = 101;
+        int BIG_CLOUD_WIDTH = (int) (Game.SCALE * BIG_CLOUD_WIDTH_DEFAULT);
+        int BIG_CLOUD_HEIGHT = (int) (Game.SCALE * BIG_CLOUD_HEIGHT_DEFAULT);
+        int SMALL_CLOUD_WIDTH_DEFAULT = 74;
+        int SMALL_CLOUD_HEIGHT_DEFAULT = 24;
+        int SMALL_CLOUD_WIDTH = (int) (Game.SCALE * SMALL_CLOUD_WIDTH_DEFAULT);
+        int SMALL_CLOUD_HEIGHT = (int) (Game.SCALE * SMALL_CLOUD_HEIGHT_DEFAULT);
+    }
+
     interface UI {
 
         interface Buttons {

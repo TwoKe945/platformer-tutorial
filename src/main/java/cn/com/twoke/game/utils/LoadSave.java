@@ -23,6 +23,13 @@ public class LoadSave {
     public static final String URM_BUTTON = "urm_buttons.png";
     public static final String VOLUME_BUTTON = "volume_buttons.png";
 
+
+    // 背景
+    public static final String PLAYING_BG_IMG = "playing_bg_img.png";
+    public static final String SMALL_CLOUDS = "small_clouds.png";
+    public static final String BIG_CLOUDS = "big_clouds.png";
+
+
     public static BufferedImage GetSpriteAtlas(String spriteFileName) {
         BufferedImage image = null;
         InputStream is = LoadSave.class.getResourceAsStream("/" + spriteFileName);
