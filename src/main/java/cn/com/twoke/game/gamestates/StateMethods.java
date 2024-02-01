@@ -12,6 +12,7 @@ public interface StateMethods {
     default void mousePressed(MouseEvent e) {};
     default void mouseReleased(MouseEvent e) {};
     default void mouseMoved(MouseEvent e) {};
+    default  void mouseDragged(MouseEvent e) {};
     default void keyPressed(KeyEvent e) {};
     default void keyReleased(KeyEvent e) {};
 }

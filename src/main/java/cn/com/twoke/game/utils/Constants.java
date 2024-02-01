@@ -17,6 +17,13 @@ public interface Constants {
             int B_HEIGHT = (int)(B_HEIGHT_DEFAULT * Game.SCALE);
         }
 
+        interface PauseButtons {
+
+            int SOUND_SIZE_DEFAULT = 42;
+            int SOUND_SIZE = (int)(SOUND_SIZE_DEFAULT * Game.SCALE);
+
+        }
+
     }
     interface Direction {
         int LEFT = 0;
