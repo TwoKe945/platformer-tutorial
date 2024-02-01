@@ -22,12 +22,14 @@ public final class HelpMethods {
             return true;
         if (y < 0 || y >= Game.GAME_HEIGHT)
             return  true;
-
         float xIndex = x / Game.TILES_SIZE;
         float yIndex = y / Game.TILES_SIZE;
         if (levelData.length <= yIndex || levelData[levelData.length-1].length <= xIndex) return true;
+       return IsTileSolid((int)xIndex, (int) yIndex, levelData);
+    }
 
-        int value = levelData[(int) yIndex][(int) xIndex];
+    public static boolean IsTileSolid(int xTile, int yTile, int[][] lvlData) {
+        int value = lvlData[(int) yTile][(int) xTile];
         return value >= 48 || value < 0 || value != 11;
     }
 
@@ -68,5 +70,29 @@ public final class HelpMethods {
             if (!IsSolid(hitBox.x + hitBox.width , hitBox.y + hitBox.height + 1, levelData ))
                 return false;
         return true;
+    }
+
+
+    public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
+        for (int i = 0; i < xEnd - xStart; i++) {
+            if (IsTileSolid(xStart + i, y, lvlData )) {
+                return false;
+            }
+            // fixme 修复在悬崖时，敌人会停留不转身巡逻的问题
+            if (!IsTileSolid(xStart + i, y + 1, lvlData )) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public static boolean IsSightClear(int[][] lvlData, Rectangle2D.Float firstHitBox, Rectangle2D.Float secondHitBox, int yTile) {
+        int firstXTile = (int)(firstHitBox.x / Game.TILES_SIZE);
+        int secondXTile = (int)(secondHitBox.x / Game.TILES_SIZE);
+        if (firstXTile > secondXTile)
+            return IsAllTilesWalkable(secondXTile, firstXTile, yTile, lvlData);
+        else
+            return IsAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);
     }
 }
