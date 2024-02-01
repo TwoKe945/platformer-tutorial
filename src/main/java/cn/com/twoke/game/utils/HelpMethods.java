@@ -31,6 +31,10 @@ public final class HelpMethods {
         return value >= 48 || value < 0 || value != 11;
     }
 
+    public static boolean IsFloor(Rectangle2D.Float hitBox, float xSpeed, int[][] lvlData) {
+        return IsSolid(hitBox.x +xSpeed, hitBox.y + hitBox.height + 1, lvlData);
+    }
+
 
     public static float GetEntityXPosNextToWall(Rectangle2D.Float hitBox, float xSpeed) {
         int currentTile = (int) (hitBox.x / Game.TILES_SIZE);

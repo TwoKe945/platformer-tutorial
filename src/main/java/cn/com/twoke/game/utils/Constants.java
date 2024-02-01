@@ -104,7 +104,8 @@ public interface Constants {
         public static final int CRABBY_WIDTH = (int)(Game.SCALE * CRABBY_WIDTH_DEFAULT);
         public static final int CRABBY_HEIGHT =(int)(Game.SCALE * CRABBY_HEIGHT_DEFAULT);
 
-
+        public static final int CRABBY_DRAW_OFFSET_X = (int)(Game.SCALE * 26);
+        public static final int CRABBY_DRAW_OFFSET_Y =  (int)(Game.SCALE * 9);
 
         public static int GetSpriteAmount(int enemyType, int enemyState) {
             switch (enemyType) {

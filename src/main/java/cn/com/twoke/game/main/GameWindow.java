@@ -18,12 +18,11 @@ public class GameWindow  {
 //        jframe.setSize(1280, 800);
         jframe.setDefaultCloseOperation(EXIT_ON_CLOSE);
         jframe.add(gamePanel);
-        // 设置显示位置到屏幕中间
-        jframe.setLocationRelativeTo(null);
         jframe.setResizable(false);
         jframe.pack();
+        // 设置显示位置到屏幕中间,必须在pack后面设置
+        jframe.setLocationRelativeTo(null);
         jframe.setVisible(true);
-
         jframe.addWindowFocusListener(new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
