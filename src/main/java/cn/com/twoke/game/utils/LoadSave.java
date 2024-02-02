@@ -46,10 +46,11 @@ public class LoadSave {
 
     //
     public static final String COMPLETED_SPRITE = "completed_sprite.png";
+    public static final String POTIONS_SPRITES = "potions_sprites.png";
+    public static final String OBJECTS_SPRITES = "objects_sprites.png";
 
 
     // 关卡
-
     public static BufferedImage[] GetAllLevels() {
         URL url = LoadSave.class.getResource("/lvls");
         File file = null;

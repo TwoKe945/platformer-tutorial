@@ -4,6 +4,7 @@ import cn.com.twoke.game.entities.EnemyManager;
 import cn.com.twoke.game.entities.Player;
 import cn.com.twoke.game.levels.LevelManager;
 import cn.com.twoke.game.main.Game;
+import cn.com.twoke.game.objects.ObjectManager;
 import cn.com.twoke.game.ui.GameOverOverlay;
 import cn.com.twoke.game.ui.LevelCompleteOverlay;
 import cn.com.twoke.game.ui.PauseOverlay;
@@ -23,6 +24,7 @@ public class Playing extends State implements StateMethods {
     private Player player;
     private LevelManager levelManager;
     private EnemyManager enemyManager;
+    private ObjectManager objectManager;
     private boolean gameOver = false;
     private boolean paused = false;
     // 是否完成：完成本关所有任务
@@ -30,7 +32,6 @@ public class Playing extends State implements StateMethods {
 
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverlay;
-
     private LevelCompleteOverlay levelCompleteOverlay;
 
     private int xLvlOffset;
@@ -84,11 +85,13 @@ public class Playing extends State implements StateMethods {
         player = new Player(200, 200, (int)(64 * Game.SCALE),  (int)(40 * Game.SCALE), this);
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
+        objectManager = new ObjectManager(this);
         player.loadLevelData(levelManager.getCurrentLevel().getLevelData());
         player.setSpawn(levelManager.getCurrentLevel().getLvlSpawn());
         pauseOverlay = new PauseOverlay(this);
         gameOverOverlay = new GameOverOverlay(this);
         levelCompleteOverlay = new LevelCompleteOverlay(this);
+
     }
 
     public void unpauseGame() {
@@ -107,6 +110,7 @@ public class Playing extends State implements StateMethods {
     public void update() {
         if (!paused && !gameOver) {
             levelManager.update();
+            objectManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             checkCloseToBorder();
@@ -145,6 +149,7 @@ public class Playing extends State implements StateMethods {
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
         enemyManager.draw(g, xLvlOffset);
+        objectManager.draw(g, xLvlOffset);
         if (paused) {
             pauseOverlay.draw(g);
         } else if (gameOver) {
