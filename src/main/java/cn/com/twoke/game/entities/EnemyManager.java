@@ -1,12 +1,14 @@
 package cn.com.twoke.game.entities;
 
 import cn.com.twoke.game.gamestates.Playing;
+import cn.com.twoke.game.levels.Level;
 import cn.com.twoke.game.utils.LoadSave;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 import static cn.com.twoke.game.utils.Constants.EnemyConstants.*;
 
@@ -14,25 +16,29 @@ public class EnemyManager {
 
     private Playing playing;
     private BufferedImage[][] crabbyArr;
-    private ArrayList<Crabby> crabbies;
+    private List<Crabby> crabbies;
 
     public EnemyManager(Playing playing) {
         this.playing = playing;
         loadEnemyImgs();
-        addEnemies();
     }
 
-    private void addEnemies() {
-        crabbies = LoadSave.GetCrabs();
+    public void loadEnemies(Level level) {
+        crabbies = level.getCrabbies();
         System.out.println("size of crabs: " + crabbies.size());
     }
 
 
     public void update(int[][] lvlData, Player player) {
+        boolean isAnyActive  = false;
         for (Crabby crabby : crabbies) {
-            if (crabby.isActive())
+            if (crabby.isActive()) {
                 crabby.update(lvlData, player);
+                isAnyActive = true;
+            }
         }
+        if (!isAnyActive)
+            playing.setLevelCompleted(true);
     }
 
 

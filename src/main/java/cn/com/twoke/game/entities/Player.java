@@ -330,4 +330,13 @@ public class Player extends Entity {
             this.inAir = true;
         }
     }
+
+
+    public void setSpawn(Point spawn) {
+        this.x = spawn.x;
+        this.y = spawn.y;
+        hitBox.x = x;
+        hitBox.y = y;
+    }
+
 }

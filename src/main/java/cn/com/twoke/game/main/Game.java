@@ -5,8 +5,10 @@ import cn.com.twoke.game.gamestates.GameState;
 import cn.com.twoke.game.gamestates.Menu;
 import cn.com.twoke.game.gamestates.Playing;
 import cn.com.twoke.game.levels.LevelManager;
+import cn.com.twoke.game.utils.LoadSave;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Game implements Runnable
 {

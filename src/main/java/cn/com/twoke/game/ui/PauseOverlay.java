@@ -74,6 +74,9 @@ public class PauseOverlay {
         volumeB.update();
     }
     public void draw(Graphics g) {
+        g.setColor(new Color(0,0,0, 200));
+        g.fillRect(0,0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
+
         g.drawImage(background, bgX, bgY, bgW, bgH, null );
 
         // Sound Button

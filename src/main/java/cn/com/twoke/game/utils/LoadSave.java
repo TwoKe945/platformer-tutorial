@@ -6,9 +6,16 @@ import cn.com.twoke.game.main.Game;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static cn.com.twoke.game.utils.Constants.EnemyConstants.CRABBY;
 
@@ -37,10 +44,43 @@ public class LoadSave {
     public static final String CRABBY_SPRITE = "crabby_sprite.png";
     public static final String HEALTH_POWER_BAR = "health_power_bar.png";
 
+    //
+    public static final String COMPLETED_SPRITE = "completed_sprite.png";
 
 
-    public static ArrayList<Crabby> GetCrabs() {
-        BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
+    // 关卡
+
+    public static BufferedImage[] GetAllLevels() {
+        URL url = LoadSave.class.getResource("/lvls");
+        File file = null;
+        try {
+            file = new File(url.toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        File[] files = Optional.ofNullable(file).orElseThrow(() -> new RuntimeException("关卡文件夹不能为空！")).listFiles();
+        return Arrays.stream(Optional.ofNullable(files).orElseThrow(() -> new RuntimeException("关卡文件不能为空！"))).sorted(LoadSave::compareLevelFiles).map(LoadSave::fileToBufferedImage)
+                .toArray(BufferedImage[]::new);
+    }
+
+    private static int parseInt(File lvlFile) {
+        return Integer.parseInt(lvlFile.getName().replace(".png", "") );
+    }
+
+    private static BufferedImage fileToBufferedImage(File file) {
+        try {
+            return ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static int compareLevelFiles(File lvlA,File lvlB) {
+        return parseInt(lvlA) - parseInt(lvlB);
+    }
+
+    public static ArrayList<Crabby> GetCrabs( BufferedImage img) {
         ArrayList<Crabby> list = new ArrayList<>();
         for (int j = 0; j < img.getHeight(); j++) {
             for (int i = 0; i < img.getWidth(); i++) {
@@ -71,8 +111,7 @@ public class LoadSave {
     }
 
 
-    public static int[][] GetLevelData() {
-        BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
+    public static int[][] GetLevelData(BufferedImage img) {
         int[][] levelData = new int[img.getHeight()][img.getWidth()];
         for (int j = 0; j < img.getHeight(); j++) {
             for (int i = 0; i < img.getWidth(); i++) {
@@ -85,5 +124,20 @@ public class LoadSave {
         }
         return levelData;
     }
+
+
+    public static Point GetPlayerSpawn(BufferedImage img) {
+        for (int j = 0; j < img.getHeight(); j++) {
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i,j));
+                int value = color.getGreen();
+                if (value == 100)
+                    return new Point(i * Game.TILES_SIZE, j * Game.TILES_SIZE);
+            }
+        }
+        return new Point( Game.TILES_SIZE,  Game.TILES_SIZE);
+    }
+
+
 
 }
