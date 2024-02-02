@@ -4,6 +4,8 @@ import cn.com.twoke.game.main.Game;
 
 public interface Constants {
 
+    float GRAVITY = 0.04f * Game.SCALE;
+    float ANI_SPEED = (int)( 25 * Game.SCALE);
 
     boolean ENABLE_DEBUG_BOX = true;
 

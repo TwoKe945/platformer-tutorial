@@ -1,40 +1,32 @@
 package cn.com.twoke.game.entities;
 
 import cn.com.twoke.game.main.Game;
-import cn.com.twoke.game.utils.Constants;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 
 
 import java.awt.geom.Rectangle2D;
 
+import static cn.com.twoke.game.utils.Constants.ANI_SPEED;
 import static cn.com.twoke.game.utils.Constants.Direction.*;
 import static cn.com.twoke.game.utils.Constants.EnemyConstants.*;
+import static cn.com.twoke.game.utils.Constants.GRAVITY;
 import static cn.com.twoke.game.utils.HelpMethods.*;
 
 public abstract class Enemy extends Entity{
 
-    protected int aniIndex, enemyState, enemyType;
-    protected int aniTick, aniSpeed = (int)( 25 * Game.SCALE);
+    protected int enemyType;
     protected boolean firstUpdate = true;
-    protected boolean inAir = false;
-    protected float fallSpeed;
-    protected float gravity = 0.04f * Game.SCALE;
     protected  int walkDir = LEFT;
-    protected float walkSpeed = 0.35f * Game.SCALE;
     protected int tileY;
     protected float attackDistance = Game.TILES_SIZE;
-
-    protected int maxHealth;
-    protected int currentHealth;
-
     protected boolean active = true;
     protected boolean attackChecked;
     public Enemy(float x, float y, int width, int height, int enemyType) {
         super(x, y, width, height);
         this.enemyType = enemyType;
-        initHitBox(x, y, width, height);
+        initHitBox(width, height);
         maxHealth = GetMaxHealth(enemyType);
         currentHealth = maxHealth;
+        this.walkSpeed = 0.35f * Game.SCALE;
     }
 
     public void hurt(int amount) {
@@ -53,7 +45,7 @@ public abstract class Enemy extends Entity{
         currentHealth = maxHealth;
         newState(IDLE);
         active = true;
-        fallSpeed = 0;
+        airSpeed = 0f;
     }
 
     protected void checkEnemyHit(Rectangle2D.Float attackBox,Player player) {
@@ -65,15 +57,15 @@ public abstract class Enemy extends Entity{
 
     protected void updateAnimationTick() {
         aniTick++;
-        if (aniTick >= aniSpeed) {
+        if (aniTick >= ANI_SPEED) {
             aniTick = 0;
             aniIndex++;
-            if (aniIndex >= GetSpriteAmount(enemyType, enemyState)) {
+            if (aniIndex >= GetSpriteAmount(enemyType, state)) {
                 aniIndex = 0;
 
-                if (enemyState == ATTACK || enemyState == HIT) {
-                    enemyState = IDLE;
-                }else if (enemyState == DEAD) {
+                if (state == ATTACK || state == HIT) {
+                    state = IDLE;
+                }else if (state == DEAD) {
                     active = false;
                 }
             }
@@ -88,12 +80,12 @@ public abstract class Enemy extends Entity{
     }
 
     protected void updateInAir(int[][] lvlData) {
-        if(CanMoveHere(hitBox.x, hitBox.y + fallSpeed, hitBox.width, hitBox.height, lvlData)) {
-            hitBox.y += fallSpeed;
-            fallSpeed += gravity;
+        if(CanMoveHere(hitBox.x, hitBox.y + airSpeed, hitBox.width, hitBox.height, lvlData)) {
+            hitBox.y += airSpeed;
+            airSpeed += GRAVITY;
         } else {
             inAir =false;
-            hitBox.y = GetEntityYPosNextToWall(hitBox, fallSpeed);
+            hitBox.y = GetEntityYPosNextToWall(hitBox, airSpeed);
             tileY = (int)( hitBox.y / Game.TILES_SIZE);
         }
     }
@@ -119,7 +111,7 @@ public abstract class Enemy extends Entity{
     }
 
     protected void newState(int enemyState) {
-        this.enemyState = enemyState;
+        this.state = enemyState;
         aniTick = 0;
         aniIndex = 0;
     }
@@ -152,13 +144,9 @@ public abstract class Enemy extends Entity{
         return absValue <= attackDistance;
     }
 
-    public int getAniIndex() {
-        return aniIndex;
-    }
 
-    public int getEnemyState() {
-        return enemyState;
-    }
+
+
 
     protected void changeWalkDir() {
         if (walkDir == LEFT) {
