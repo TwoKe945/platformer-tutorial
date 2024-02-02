@@ -21,6 +21,8 @@ public class GameContainer extends GameObject{
             xDrawOffset = (int)(Game.SCALE * 8);
             yDrawOffset = (int)(Game.SCALE * 5);
         }
+        hitBox.y += yDrawOffset + (int)(Game.SCALE * 2);
+        hitBox.x += (float) xDrawOffset / 2;
     }
 
 

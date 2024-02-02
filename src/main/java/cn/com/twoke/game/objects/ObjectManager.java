@@ -1,9 +1,11 @@
 package cn.com.twoke.game.objects;
 
 import cn.com.twoke.game.gamestates.Playing;
+import cn.com.twoke.game.levels.Level;
 import cn.com.twoke.game.utils.LoadSave;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +27,48 @@ public class ObjectManager {
         this.playing = playing;
         loadImgs();
 
-        potions = new ArrayList<>();
-        containers = new ArrayList<>();
-
-        potions.add(new Potion(300, 300, RED_POTION));
-        potions.add(new Potion(400, 300, BLUE_POTION));
-        containers.add(new GameContainer(500, 300, BARREL));
-        containers.add(new GameContainer(600, 300, BOX));
     }
+
+    public void checkObjectTouched(Rectangle2D.Float hitbox) {
+        for (Potion potion : potions) {
+            if (potion.isActive()) {
+                if (hitbox.intersects(potion.getHitBox())) {
+                    potion.setActive(false);
+                    applyEffectToPlayer(potion);
+                }
+            }
+        }
+
+
+
+    }
+
+
+    public void applyEffectToPlayer(Potion potion) {
+        if (potion.getObjType() == RED_POTION) {
+          playing.getPlayer().changeHealth(RED_POTION_VALUE);
+        } else {
+           playing.getPlayer().changePower(BLUE_POTION_VALUE);
+        }
+    }
+
+    public void checkObjectHit(Rectangle2D.Float attackBox) {
+        for (GameContainer container : containers) {
+            if (container.isActive()) {
+                if (container.getHitBox().intersects(attackBox)) {
+                    container.setAnimation(true);
+                    int  type = 0;
+                    if (container.getObjType() == BARREL) {
+                        type = 1;
+                    }
+                    potions.add(new Potion((int)(container.getHitBox().x + container.getHitBox().width / 4),
+                            (int)(container.getHitBox().y - container.getHitBox().height / 5), type));
+                    return;
+                }
+            }
+        }
+    }
+
 
     private void loadImgs() {
         BufferedImage potionSprite = LoadSave.GetSpriteAtlas(LoadSave.POTIONS_SPRITES);
@@ -115,4 +151,17 @@ public class ObjectManager {
         }
     }
 
+    public void loadObjects(Level level) {
+        this.potions = level.getPotions();
+        this.containers = level.getContainers();
+    }
+
+    public void resetAllObjects() {
+        for (Potion potion : potions) {
+            potion.reset();
+        }
+        for (GameContainer container : containers) {
+            container.reset();
+        }
+    }
 }

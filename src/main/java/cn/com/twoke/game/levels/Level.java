@@ -2,6 +2,8 @@ package cn.com.twoke.game.levels;
 
 import cn.com.twoke.game.entities.Crabby;
 import cn.com.twoke.game.main.Game;
+import cn.com.twoke.game.objects.GameContainer;
+import cn.com.twoke.game.objects.Potion;
 import cn.com.twoke.game.utils.LoadSave;
 
 import java.awt.*;
@@ -15,6 +17,8 @@ public class Level {
     private BufferedImage img;
     private int[][] levelData;
     private List<Crabby> crabbies;
+    private List<Potion> potions;
+    private List<GameContainer> containers;
     private int lvlTilesWide;
     private int maxTilesOffset;
     private int maxLvlOffsetX;
@@ -25,8 +29,26 @@ public class Level {
         this.img = img;
         createLevelData();
         createEnemies();
+        createContainers();
+        createPotions();
         createLvlOffsetDaTa();
         calcPlayerSpawn();
+    }
+
+    private void createPotions() {
+        potions = GetPotions(img);
+    }
+
+    private void createContainers() {
+        containers = GetContainers(img);
+    }
+
+    public List<Potion> getPotions() {
+        return potions;
+    }
+
+    public List<GameContainer> getContainers() {
+        return containers;
     }
 
     private void calcPlayerSpawn() {

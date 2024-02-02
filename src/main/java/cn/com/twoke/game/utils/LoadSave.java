@@ -2,6 +2,8 @@ package cn.com.twoke.game.utils;
 
 import cn.com.twoke.game.entities.Crabby;
 import cn.com.twoke.game.main.Game;
+import cn.com.twoke.game.objects.GameContainer;
+import cn.com.twoke.game.objects.Potion;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static cn.com.twoke.game.utils.Constants.EnemyConstants.CRABBY;
+import static cn.com.twoke.game.utils.Constants.ObjectConstants.*;
 
 public class LoadSave {
 
@@ -89,6 +92,32 @@ public class LoadSave {
                 int value = color.getGreen();
                 if (value == CRABBY)
                     list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<GameContainer> GetContainers(BufferedImage img) {
+        ArrayList<GameContainer> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++) {
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i,j));
+                int value = color.getBlue();
+                if (value == BOX || value == BARREL)
+                    list.add(new GameContainer(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<Potion> GetPotions(BufferedImage img) {
+        ArrayList<Potion> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++) {
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i,j));
+                int value = color.getBlue();
+                if (value == RED_POTION || value == BLUE_POTION)
+                    list.add(new Potion(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
             }
         }
         return list;

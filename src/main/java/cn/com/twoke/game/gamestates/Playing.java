@@ -65,6 +65,7 @@ public class Playing extends State implements StateMethods {
 
     private void loadStartLevel() {
         enemyManager.loadEnemies(levelManager.getCurrentLevel());
+        objectManager.loadObjects(levelManager.getCurrentLevel());
     }
 
     private void calcLevelOffset() {
@@ -266,6 +267,7 @@ public class Playing extends State implements StateMethods {
         completed = false;
         player.resetAll();
         enemyManager.resetAllEnemies();
+        objectManager.resetAllObjects();
     }
 
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
@@ -282,5 +284,17 @@ public class Playing extends State implements StateMethods {
 
     public void setLevelCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public ObjectManager getObjectManager() {
+        return objectManager;
+    }
+
+    public void checkPotionTouched(Rectangle2D.Float hitBox) {
+        objectManager.checkObjectTouched(hitBox);
+    }
+
+    public void checkObjectHit(Rectangle2D.Float attackBox) {
+        objectManager.checkObjectHit(attackBox);
     }
 }
