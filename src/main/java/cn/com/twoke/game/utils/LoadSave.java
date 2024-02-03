@@ -2,6 +2,7 @@ package cn.com.twoke.game.utils;
 
 import cn.com.twoke.game.entities.Crabby;
 import cn.com.twoke.game.main.Game;
+import cn.com.twoke.game.objects.Cannon;
 import cn.com.twoke.game.objects.GameContainer;
 import cn.com.twoke.game.objects.Potion;
 import cn.com.twoke.game.objects.Spike;
@@ -53,6 +54,7 @@ public class LoadSave {
     public static final String POTIONS_SPRITES = "potions_sprites.png";
     public static final String OBJECTS_SPRITES = "objects_sprites.png";
     public static final String TRAP_ATLAS = "trap_atlas.png";
+    public static final String CANON_ATLAS = "cannon_atlas.png";
 
 
     // 关卡
@@ -132,6 +134,19 @@ public class LoadSave {
                 int value = color.getBlue();
                 if (value == SPIKE)
                     list.add(new Spike(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        }
+        return list;
+    }
+
+    public static List<Cannon> GetCanons(BufferedImage img) {
+        List<Cannon> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++) {
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i,j));
+                int value = color.getBlue();
+                if (value == CANON_LEFT || value == CANON_RIGHT)
+                    list.add(new Cannon(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
             }
         }
         return list;

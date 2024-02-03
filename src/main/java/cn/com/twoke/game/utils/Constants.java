@@ -16,6 +16,8 @@ public interface Constants {
         public static final int BARREL = 2;
         public static final int BOX = 3;
         public static final int SPIKE = 4;
+        public static final int CANON_LEFT = 5;
+        public static final int CANON_RIGHT = 6;
 
         public static final int RED_POTION_VALUE = 15;
         public static final int BLUE_POTION_VALUE = 10;
@@ -35,10 +37,18 @@ public interface Constants {
         public static final int SPIKE_WIDTH = (int) (Game.SCALE * SPIKE_WIDTH_DEFAULT);
         public static final int SPIKE_HEIGHT = (int) (Game.SCALE * SPIKE_HEIGHT_DEFAULT);
 
+
+        public static final int CANON_WIDTH_DEFAULT = 40;
+        public static final int CANON_HEIGHT_DEFAULT = 26;
+        public static final int CANON_WIDTH = (int) (Game.SCALE * CANON_WIDTH_DEFAULT);
+        public static final int CANON_HEIGHT = (int) (Game.SCALE * CANON_HEIGHT_DEFAULT);
+
         public static int GetSpriteAmount(int object_type) {
             switch (object_type) {
                 case RED_POTION:
                 case BLUE_POTION:
+                case CANON_LEFT:
+                case CANON_RIGHT:
                     return 7;
                 case BARREL:
                 case BOX:

@@ -77,18 +77,22 @@ public final class HelpMethods {
 
 
     public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
-        for (int i = 0; i < xEnd - xStart; i++) {
-            if (IsTileSolid(xStart + i, y, lvlData )) {
-                return false;
+        if (IsAllTilesClear(xStart, xEnd, y, lvlData))
+            for (int i = 0; i < xEnd - xStart; i++) {
+                // fixme 修复在悬崖时，敌人会停留不转身巡逻的问题
+                if (!IsTileSolid(xStart + i, y + 1, lvlData )) {
+                    return false;
+                }
             }
-            // fixme 修复在悬崖时，敌人会停留不转身巡逻的问题
-            if (!IsTileSolid(xStart + i, y + 1, lvlData )) {
-                return false;
-            }
-        }
         return true;
     }
 
+    public static boolean IsAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData) {
+        for (int i = 0; i < xEnd - xStart; i++)
+            if (IsTileSolid(xStart + i, y, lvlData ))
+                return false;
+        return true;
+    }
 
     public static boolean IsSightClear(int[][] lvlData, Rectangle2D.Float firstHitBox, Rectangle2D.Float secondHitBox, int yTile) {
         int firstXTile = (int)(firstHitBox.x / Game.TILES_SIZE);
@@ -97,6 +101,16 @@ public final class HelpMethods {
             return IsAllTilesWalkable(secondXTile, firstXTile, yTile, lvlData);
         else
             return IsAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);
+    }
+
+
+    public static boolean CanCannonSeePlayer(int[][] lvlData, Rectangle2D.Float firstHitBox, Rectangle2D.Float secondHitBox, int yTile) {
+        int firstXTile = (int)(firstHitBox.x / Game.TILES_SIZE);
+        int secondXTile = (int)(secondHitBox.x / Game.TILES_SIZE);
+        if (firstXTile > secondXTile)
+            return IsAllTilesClear(secondXTile, firstXTile, yTile, lvlData);
+        else
+            return IsAllTilesClear(firstXTile, secondXTile, yTile, lvlData);
     }
 
 

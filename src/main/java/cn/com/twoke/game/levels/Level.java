@@ -2,6 +2,7 @@ package cn.com.twoke.game.levels;
 
 import cn.com.twoke.game.entities.Crabby;
 import cn.com.twoke.game.main.Game;
+import cn.com.twoke.game.objects.Cannon;
 import cn.com.twoke.game.objects.GameContainer;
 import cn.com.twoke.game.objects.Potion;
 import cn.com.twoke.game.objects.Spike;
@@ -21,6 +22,7 @@ public class Level {
     private List<Potion> potions;
     private List<GameContainer> containers;
     private List<Spike> spikes;
+    private List<Cannon> cannons;
     private int lvlTilesWide;
     private int maxTilesOffset;
     private int maxLvlOffsetX;
@@ -34,8 +36,13 @@ public class Level {
         createContainers();
         createPotions();
         createSpikes();
+        createCanons();
         createLvlOffsetDaTa();
         calcPlayerSpawn();
+    }
+
+    private void createCanons() {
+        cannons = GetCanons(img);
     }
 
     private void createSpikes() {
@@ -106,5 +113,9 @@ public class Level {
 
     public List<Spike> getSpikes() {
         return spikes;
+    }
+
+    public List<Cannon> getCannons() {
+        return cannons;
     }
 }

@@ -52,6 +52,8 @@ public class GameObject {
                 if (objType == BARREL || objType == BOX) {
                     doAnimation = false;
                     active = false;
+                } else if ( objType == CANON_LEFT || objType == CANON_RIGHT) {
+                    doAnimation = false;
                 }
             }
         }
@@ -61,8 +63,8 @@ public class GameObject {
         aniTick = 0;
         aniIndex = 0;
         active = true;
-        // todo: add if here
-        if (objType == BARREL || objType == BOX) {
+
+        if (objType == BARREL || objType == BOX || objType == CANON_LEFT || objType == CANON_RIGHT) {
             doAnimation = false;
         } else {
             doAnimation = true;
