@@ -1,10 +1,12 @@
 package cn.com.twoke.game.main;
 
 import cn.com.twoke.game.entities.Player;
+import cn.com.twoke.game.gamestates.GameOptions;
 import cn.com.twoke.game.gamestates.GameState;
 import cn.com.twoke.game.gamestates.Menu;
 import cn.com.twoke.game.gamestates.Playing;
 import cn.com.twoke.game.levels.LevelManager;
+import cn.com.twoke.game.ui.AudioOptions;
 import cn.com.twoke.game.utils.LoadSave;
 
 import java.awt.*;
@@ -20,7 +22,8 @@ public class Game implements Runnable
 
     private Playing playing;
     private Menu menu;
-
+    private AudioOptions audioOptions;
+    private GameOptions gameOptions;
     public final static  int TILES_DEFAULT_SIZE = 32;
     public final static  float SCALE = 2f;
     public final static  int TILES_IN_WIDTH = 26;
@@ -39,8 +42,18 @@ public class Game implements Runnable
     }
 
     private void initClasses() {
+        this.audioOptions = new AudioOptions();
         this.menu = new Menu(this);
         this.playing = new Playing(this);
+        this.gameOptions = new GameOptions(this);
+    }
+
+    public AudioOptions getAudioOptions() {
+        return audioOptions;
+    }
+
+    public GameOptions getGameOptions() {
+        return gameOptions;
     }
 
     public void update() {
@@ -52,6 +65,8 @@ public class Game implements Runnable
                 this.playing.update();
                 break;
             case OPTIONS:
+                this.gameOptions.update();
+                break;
             case QUIT:
                 System.exit(0);
                 break;
@@ -62,6 +77,9 @@ public class Game implements Runnable
         switch (GameState.currentState) {
             case MENU:
                 this.menu.draw(g);
+                break;
+            case OPTIONS:
+                this.gameOptions.draw(g);
                 break;
             case PLAYING:
                 this.playing.draw(g);
