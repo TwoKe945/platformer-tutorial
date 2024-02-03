@@ -2,10 +2,7 @@ package cn.com.twoke.game.utils;
 
 import cn.com.twoke.game.entities.Crabby;
 import cn.com.twoke.game.main.Game;
-import cn.com.twoke.game.objects.Cannon;
-import cn.com.twoke.game.objects.GameContainer;
-import cn.com.twoke.game.objects.Potion;
-import cn.com.twoke.game.objects.Spike;
+import cn.com.twoke.game.objects.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static cn.com.twoke.game.utils.Constants.EnemyConstants.CRABBY;
 import static cn.com.twoke.game.utils.Constants.ObjectConstants.*;
@@ -55,6 +51,7 @@ public class LoadSave {
     public static final String OBJECTS_SPRITES = "objects_sprites.png";
     public static final String TRAP_ATLAS = "trap_atlas.png";
     public static final String CANON_ATLAS = "cannon_atlas.png";
+    public static final String BALL = "ball.png";
 
 
     // 关卡
@@ -196,6 +193,7 @@ public class LoadSave {
         }
         return new Point( Game.TILES_SIZE,  Game.TILES_SIZE);
     }
+
 
 
 

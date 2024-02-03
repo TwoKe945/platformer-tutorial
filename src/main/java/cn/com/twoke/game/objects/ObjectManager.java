@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static cn.com.twoke.game.utils.Constants.ObjectConstants.*;
+import static cn.com.twoke.game.utils.Constants.Projectiles.CANNON_BALL_HEIGHT;
+import static cn.com.twoke.game.utils.Constants.Projectiles.CANNON_BALL_WIDTH;
 import static cn.com.twoke.game.utils.HelpMethods.CanCannonSeePlayer;
-import static cn.com.twoke.game.utils.LoadSave.CANON_ATLAS;
-import static cn.com.twoke.game.utils.LoadSave.TRAP_ATLAS;
+import static cn.com.twoke.game.utils.HelpMethods.IsProjectileHittingLevel;
+import static cn.com.twoke.game.utils.LoadSave.*;
 
 /**
  * 游戏对象管理器
@@ -24,7 +26,7 @@ public class ObjectManager {
 
     private Playing playing;
     private BufferedImage[][] potionImgs,containerImgs;
-    private BufferedImage spikeImg;
+    private BufferedImage spikeImg, cannonBallImg;
 
     private BufferedImage[] canonImgs;
 
@@ -32,6 +34,7 @@ public class ObjectManager {
     private List<GameContainer> containers;
     private List<Spike> spikes;
     private List<Cannon> cannons;
+    private List<Projectile> projectiles = new ArrayList<>();
 
     private boolean resetting = false;
 
@@ -112,6 +115,7 @@ public class ObjectManager {
         for (int i = 0; i < canonImgs.length; i++) {
             canonImgs[i] = temp.getSubimage((i * CANON_WIDTH_DEFAULT), 0, CANON_WIDTH_DEFAULT, CANON_HEIGHT_DEFAULT);
         }
+        cannonBallImg = LoadSave.GetSpriteAtlas(BALL);
     }
 
 
@@ -127,8 +131,22 @@ public class ObjectManager {
         }
 
         updateCannons(levelData, player);
+        updateProjectiles(levelData, player);
 
+    }
 
+    private void updateProjectiles(int[][] levelData, Player player) {
+        for (Projectile projectile : projectiles) {
+            if (projectile.isActive()) {
+                projectile.updatePos();
+            }
+            if (projectile.getHitBox().intersects(player.getHitBox())) {
+                player.changeHealth(-25);
+                projectile.setActive(false);
+            } else if (IsProjectileHittingLevel(projectile, levelData)) {
+                projectile.setActive(false);
+            }
+        }
     }
 
     private void updateCannons(int[][] levelData, Player player) {
@@ -138,18 +156,25 @@ public class ObjectManager {
                     if (isPlayerInRange(cannon, player)) {
                         if (isPlayerInFrontOfCannon(cannon, player)) {
                             if (CanCannonSeePlayer(levelData, player.getHitBox(), cannon.getHitBox(), cannon.getTileY())) {
-                                shootCannon(cannon);
+                                cannon.setAnimation(true);
                             }
                         }
                     }
                 }
             }
             cannon.update();
+            if (cannon.getAniIndex() == 4 && cannon.getAniTick() == 0) {
+                shootCannon(cannon);
+            }
         }
     }
 
     private void shootCannon(Cannon cannon) {
-        cannon.setAnimation(true);
+        int dir = 1;
+        if (cannon.getObjType() == CANON_LEFT) {
+            dir = -1;
+        }
+        projectiles.add(new Projectile((int)cannon.getHitBox().x, (int)cannon.getHitBox().y, dir));
     }
 
     private boolean isPlayerInFrontOfCannon(Cannon cannon, Player player) {
@@ -171,6 +196,22 @@ public class ObjectManager {
         drawContainers(g,xLvlOffset);
         drawTraps(g, xLvlOffset);
         drawCannons(g, xLvlOffset);
+        drawProjectiles(g, xLvlOffset);
+    }
+
+    private void drawProjectiles(Graphics g, int xLvlOffset) {
+        for (Projectile projectile : projectiles) {
+            if (projectile.isActive()) {
+                g.drawImage(cannonBallImg,
+                        (int)(projectile.getHitBox().x - xLvlOffset),
+                        (int)(projectile.getHitBox().y ),
+                        CANNON_BALL_WIDTH,
+                        CANNON_BALL_HEIGHT,
+                        null
+                );
+            }
+        }
+
     }
 
     private void drawCannons(Graphics g, int xLvlOffset) {
@@ -240,6 +281,7 @@ public class ObjectManager {
         this.containers = new ArrayList<>(level.getContainers());
         spikes = level.getSpikes();
         cannons = level.getCannons();
+        projectiles.clear();
     }
 
     public void resetAllObjects() {

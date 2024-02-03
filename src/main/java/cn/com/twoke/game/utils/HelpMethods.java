@@ -1,6 +1,7 @@
 package cn.com.twoke.game.utils;
 
 import cn.com.twoke.game.main.Game;
+import cn.com.twoke.game.objects.Projectile;
 
 import java.awt.geom.Rectangle2D;
 
@@ -113,6 +114,13 @@ public final class HelpMethods {
             return IsAllTilesClear(firstXTile, secondXTile, yTile, lvlData);
     }
 
+
+    public static boolean IsProjectileHittingLevel(Projectile projectile, int[][] lvlData) {
+        return IsSolid(projectile.getHitBox().x + projectile.getHitBox().width /2,
+                projectile.getHitBox().y + projectile.getHitBox().height / 2,
+                lvlData
+                );
+    }
 
 
 

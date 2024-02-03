@@ -103,4 +103,8 @@ public class GameObject {
     public int getAniIndex() {
         return aniIndex;
     }
+
+    public int getAniTick() {
+        return aniTick;
+    }
 }

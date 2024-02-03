@@ -9,6 +9,18 @@ public interface Constants {
 
     boolean ENABLE_DEBUG_BOX = true;
 
+    interface Projectiles {
+      int CANNON_BALL_WIDTH_DEFAULT = 15;
+       int CANNON_BALL_HEIGHT_DEFAULT = 15;
+       int CANNON_BALL_WIDTH = (int) (Game.SCALE * CANNON_BALL_WIDTH_DEFAULT);
+       int CANNON_BALL_HEIGHT = (int) (Game.SCALE * CANNON_BALL_HEIGHT_DEFAULT);
+
+       float SPEED = 0.5f * Game.SCALE;
+
+
+    }
+
+
     class ObjectConstants {
 
         public static final int RED_POTION = 0;
