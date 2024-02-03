@@ -1,5 +1,6 @@
 package cn.com.twoke.game.main;
 
+import cn.com.twoke.game.audio.AudioPlayer;
 import cn.com.twoke.game.entities.Player;
 import cn.com.twoke.game.gamestates.GameOptions;
 import cn.com.twoke.game.gamestates.GameState;
@@ -24,6 +25,7 @@ public class Game implements Runnable
     private Menu menu;
     private AudioOptions audioOptions;
     private GameOptions gameOptions;
+    private AudioPlayer audioPlayer;
     public final static  int TILES_DEFAULT_SIZE = 32;
     public final static  float SCALE = 2f;
     public final static  int TILES_IN_WIDTH = 26;
@@ -42,10 +44,15 @@ public class Game implements Runnable
     }
 
     private void initClasses() {
-        this.audioOptions = new AudioOptions();
+        this.audioOptions = new AudioOptions(this);
         this.menu = new Menu(this);
         this.playing = new Playing(this);
         this.gameOptions = new GameOptions(this);
+        this.audioPlayer = new AudioPlayer();
+    }
+
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
     }
 
     public AudioOptions getAudioOptions() {

@@ -59,6 +59,7 @@ public class Playing extends State implements StateMethods {
         resetAll();
         levelManager.loadNextLevel();
         player.setSpawn(levelManager.getCurrentLevel().getLvlSpawn());
+        getGame().getAudioPlayer().setLevelSong(levelManager.getLvlIndex());
     }
 
     public EnemyManager getEnemyManager() {
@@ -198,6 +199,7 @@ public class Playing extends State implements StateMethods {
         if (!gameOver) {
             if (e.getButton() == MouseEvent.BUTTON1) {
                 player.setAttack(true);
+                getGame().getAudioPlayer().playAttackSound();
             }
         }
     }
@@ -307,6 +309,9 @@ public class Playing extends State implements StateMethods {
 
     public void setLevelCompleted(boolean completed) {
         this.completed = completed;
+        if (completed) {
+            getGame().getAudioPlayer().lvlCompleted();
+        }
     }
 
     public ObjectManager getObjectManager() {

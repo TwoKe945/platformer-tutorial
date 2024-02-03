@@ -37,8 +37,9 @@ public class EnemyManager {
                 isAnyActive = true;
             }
         }
-        if (!isAnyActive)
+        if (!isAnyActive) {
             playing.setLevelCompleted(true);
+        }
     }
 
 

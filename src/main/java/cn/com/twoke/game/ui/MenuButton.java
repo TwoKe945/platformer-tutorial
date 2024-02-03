@@ -80,6 +80,9 @@ public class MenuButton {
         GameState.currentState = state;
     }
 
+    public GameState getState() {
+        return state;
+    }
 
     public void resetBools() {
         mousePressed = false;

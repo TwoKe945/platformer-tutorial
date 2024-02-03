@@ -67,12 +67,17 @@ public class LevelManager {
         if (lvlIndex >= levels.size()) {
             lvlIndex = 0;
             System.out.println("No More levels! Game Completed!");
-            GameState.currentState = GameState.MENU;
+//            GameState.currentState = GameState.MENU;
+            game.getPlaying().setGameState(GameState.MENU);
         }
         Level newLevel = levels.get(lvlIndex);
         game.getPlaying().getEnemyManager().loadEnemies(newLevel);
         game.getPlaying().getPlayer().loadLevelData(newLevel.getLevelData());
         game.getPlaying().setMaxLvlOffsetX(newLevel.getMaxLvlOffsetX());
         game.getPlaying().getObjectManager().loadObjects(newLevel);
+    }
+
+    public int getLvlIndex() {
+        return lvlIndex;
     }
 }

@@ -13,7 +13,11 @@ import static cn.com.twoke.game.utils.Constants.UI.PauseButtons.SOUND_SIZE;
 public class AudioOptions {
     private VolumeButton volumeB;
     private SoundButton musicButton,sfxButton;
-    public AudioOptions() {
+
+    private Game game;
+
+    public AudioOptions(Game game) {
+        this.game = game;
         createSoundButton();
         createVolumeButton();
     }
@@ -62,9 +66,11 @@ public class AudioOptions {
     public void mouseReleased(MouseEvent e) {
         if (musicButton.isIn(e) && musicButton.isMousePressed()) {
             musicButton.setMuted(!musicButton.isMuted());
+            game.getAudioPlayer().toggleSongMute();
         }
         else if (sfxButton.isIn(e) && sfxButton.isMousePressed()) {
             sfxButton.setMuted(!sfxButton.isMuted());
+            game.getAudioPlayer().toggleEffectMute();
         }
         resetBools();
     }
@@ -96,7 +102,12 @@ public class AudioOptions {
 
     public void mouseDragged(MouseEvent e) {
         if (volumeB.isMousePressed()) {
+            float valueBefore = volumeB.getFloatValue();
             volumeB.changeX(e.getX());
+            float valueAfter = volumeB.getFloatValue();
+            if (valueAfter != valueBefore) {
+                game.getAudioPlayer().setVolume(valueAfter);
+            }
         }
     }
 

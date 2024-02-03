@@ -1,5 +1,6 @@
 package cn.com.twoke.game.entities;
 
+import cn.com.twoke.game.audio.AudioPlayer;
 import cn.com.twoke.game.gamestates.Playing;
 import cn.com.twoke.game.main.Game;
 import cn.com.twoke.game.utils.HelpMethods;
@@ -72,8 +73,11 @@ public class Player extends Entity {
                  aniIndex = 0;
                  aniTick = 0;
                  playing.setPlayerDying(true);
+                 playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
              } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
                 playing.setGameOver(true);
+                 playing.getGame().getAudioPlayer().stopSong();
+                 playing.getGame().getAudioPlayer().playEffect(AudioPlayer.GAMEOVER);
              } else {
                  updateAnimationTick();
              }
@@ -258,6 +262,7 @@ public class Player extends Entity {
     private void jump() {
         if (inAir)
             return;
+        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.JUMP);
         inAir = true;
         airSpeed = jumpSpeed;
     }
