@@ -52,6 +52,7 @@ public class LoadSave {
     public static final String TRAP_ATLAS = "trap_atlas.png";
     public static final String CANON_ATLAS = "cannon_atlas.png";
     public static final String BALL = "ball.png";
+    public static final String DEATH_SCREEN = "death_screen.png";
 
 
     // 关卡

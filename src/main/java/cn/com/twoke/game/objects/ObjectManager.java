@@ -139,12 +139,12 @@ public class ObjectManager {
         for (Projectile projectile : projectiles) {
             if (projectile.isActive()) {
                 projectile.updatePos();
-            }
-            if (projectile.getHitBox().intersects(player.getHitBox())) {
-                player.changeHealth(-25);
-                projectile.setActive(false);
-            } else if (IsProjectileHittingLevel(projectile, levelData)) {
-                projectile.setActive(false);
+                if (projectile.getHitBox().intersects(player.getHitBox())) {
+                    player.changeHealth(-25);
+                    projectile.setActive(false);
+                } else if (IsProjectileHittingLevel(projectile, levelData)) {
+                    projectile.setActive(false);
+                }
             }
         }
     }

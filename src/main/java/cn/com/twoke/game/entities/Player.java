@@ -2,7 +2,6 @@ package cn.com.twoke.game.entities;
 
 import cn.com.twoke.game.gamestates.Playing;
 import cn.com.twoke.game.main.Game;
-import cn.com.twoke.game.utils.Constants;
 import cn.com.twoke.game.utils.HelpMethods;
 import cn.com.twoke.game.utils.LoadSave;
 
@@ -68,16 +67,26 @@ public class Player extends Entity {
     public void update() {
         updateHealthBar();
         if (currentHealth <= 0) {
-            playing.setGameOver(true);
+             if (state != DEAD) {
+                 state = DEAD;
+                 aniIndex = 0;
+                 aniTick = 0;
+                 playing.setPlayerDying(true);
+             } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
+                playing.setGameOver(true);
+             } else {
+                 updateAnimationTick();
+             }
             return;
         }
         updateAttackBox();
 
         updatePos();
-        if (moving)
+        if (moving) {
             checkPotionTouched();
             checkSpikeTouched();
             tileY = (int)(hitBox.y / Game.TILES_SIZE);
+        }
         if (attacking)
             checkAttack();
         updateAnimationTick();
@@ -271,7 +280,7 @@ public class Player extends Entity {
         if (aniTick >= ANI_SPEED) {
             aniTick = 0;
             aniIndex++;
-            if (aniIndex >= getSpriteAmount(state)){
+            if (aniIndex >= GetSpriteAmount(state)){
                 aniIndex = 0;
                 attacking = false;
                 attackChecked = false;
@@ -320,6 +329,14 @@ public class Player extends Entity {
 
         hitBox.x = x;
         hitBox.y = y;
+        if (right) {
+            attackBox.x = hitBox.x + hitBox.width + (int)(Game.SCALE * 10);
+        } else if (left) {
+            attackBox.x =  hitBox.x - hitBox.width - (int)(Game.SCALE * 10);
+        } else {
+            attackBox.x = x;
+        }
+        attackBox.y = hitBox.y + (Game.SCALE * 10);
 
         if (!HelpMethods.IsEntityOnFloor(hitBox, levelData)) {
             this.inAir = true;

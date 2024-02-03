@@ -132,7 +132,7 @@ public interface Constants {
 
 
 
-        public static int getSpriteAmount(int playAction) {
+        public static int GetSpriteAmount(int playAction) {
             switch (playAction) {
                 case DEAD:
                     return 8;

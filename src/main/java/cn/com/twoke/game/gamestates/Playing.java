@@ -44,6 +44,7 @@ public class Playing extends State implements StateMethods {
     private int[] smallCloudsPos;
     private Random random = new Random();
 
+    private boolean playerDying = false;
 
     public Playing(Game game) {
         super(game);
@@ -110,19 +111,20 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void update() {
-        if (!paused && !gameOver) {
+        if (paused) {
+            pauseOverlay.update();
+        } else if (completed) {
+            levelCompleteOverlay.update();
+        } else if (gameOver) {
+            gameOverOverlay.update();
+        } else if (playerDying) {
+            player.update();
+        } else if (!gameOver) {
             levelManager.update();
             objectManager.update(this.getLevelManager().getCurrentLevel().getLevelData(), player);
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             checkCloseToBorder();
-
-            if (completed) {
-                levelCompleteOverlay.update();
-            }
-
-        } else {
-            pauseOverlay.update();
         }
     }
 
@@ -175,6 +177,7 @@ public class Playing extends State implements StateMethods {
         } else if (completed) {
             levelCompleteOverlay.draw(g);
         }
+
     }
 
     private void drawClouds(Graphics g) {
@@ -216,8 +219,6 @@ public class Playing extends State implements StateMethods {
                     paused = !paused;
                     break;
             }
-        } else {
-            gameOverOverlay.keyPressed(e);
         }
     }
 
@@ -244,6 +245,8 @@ public class Playing extends State implements StateMethods {
             } else if (completed) {
                 levelCompleteOverlay.mousePressed(e);
             }
+        } else {
+            gameOverOverlay.mousePressed(e);
         }
     }
 
@@ -255,6 +258,8 @@ public class Playing extends State implements StateMethods {
             } else if (completed) {
                 levelCompleteOverlay.mouseReleased(e);
             }
+        }else {
+            gameOverOverlay.mouseReleased(e);
         }
     }
 
@@ -266,6 +271,8 @@ public class Playing extends State implements StateMethods {
             } else if (completed) {
                 levelCompleteOverlay.mouseMoved(e);
             }
+        }else {
+            gameOverOverlay.mouseMoved(e);
         }
     }
 
@@ -282,6 +289,7 @@ public class Playing extends State implements StateMethods {
         gameOver = false;
         paused = false;
         completed = false;
+        playerDying = false;
         player.resetAll();
         enemyManager.resetAllEnemies();
         objectManager.resetAllObjects();
@@ -311,4 +319,7 @@ public class Playing extends State implements StateMethods {
     }
 
 
+    public void setPlayerDying(boolean playerDying) {
+        this.playerDying = playerDying;
+    }
 }
