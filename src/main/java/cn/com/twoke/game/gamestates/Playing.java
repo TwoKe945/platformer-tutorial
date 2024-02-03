@@ -196,10 +196,11 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!gameOver) {
+        if (!gameOver && !paused) {
             if (e.getButton() == MouseEvent.BUTTON1) {
                 player.setAttack(true);
-                getGame().getAudioPlayer().playAttackSound();
+            } else if(e.getButton() == MouseEvent.BUTTON3) {
+                player.powerAttack();
             }
         }
     }
