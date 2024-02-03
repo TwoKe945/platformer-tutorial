@@ -2,6 +2,7 @@ package cn.com.twoke.game.gamestates;
 
 import cn.com.twoke.game.entities.EnemyManager;
 import cn.com.twoke.game.entities.Player;
+import cn.com.twoke.game.levels.Level;
 import cn.com.twoke.game.levels.LevelManager;
 import cn.com.twoke.game.main.Game;
 import cn.com.twoke.game.objects.ObjectManager;
@@ -141,6 +142,22 @@ public class Playing extends State implements StateMethods {
         }
     }
 
+    public void checkEnemyHit(Rectangle2D.Float attackBox) {
+        enemyManager.checkEnemyHit(attackBox);
+    }
+
+    public void checkPotionTouched(Rectangle2D.Float hitBox) {
+        objectManager.checkObjectTouched(hitBox);
+    }
+
+    public void checkObjectHit(Rectangle2D.Float attackBox) {
+        objectManager.checkObjectHit(attackBox);
+    }
+
+    public void checkSpikeTouched(Player player) {
+        objectManager.checkSpikeTouched(player);
+    }
+
     @Override
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
@@ -270,9 +287,7 @@ public class Playing extends State implements StateMethods {
         objectManager.resetAllObjects();
     }
 
-    public void checkEnemyHit(Rectangle2D.Float attackBox) {
-        enemyManager.checkEnemyHit(attackBox);
-    }
+
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
@@ -290,11 +305,10 @@ public class Playing extends State implements StateMethods {
         return objectManager;
     }
 
-    public void checkPotionTouched(Rectangle2D.Float hitBox) {
-        objectManager.checkObjectTouched(hitBox);
+
+    public LevelManager getLevelManager() {
+        return levelManager;
     }
 
-    public void checkObjectHit(Rectangle2D.Float attackBox) {
-        objectManager.checkObjectHit(attackBox);
-    }
+
 }

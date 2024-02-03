@@ -4,6 +4,7 @@ import cn.com.twoke.game.entities.Crabby;
 import cn.com.twoke.game.main.Game;
 import cn.com.twoke.game.objects.GameContainer;
 import cn.com.twoke.game.objects.Potion;
+import cn.com.twoke.game.objects.Spike;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -51,6 +52,7 @@ public class LoadSave {
     public static final String COMPLETED_SPRITE = "completed_sprite.png";
     public static final String POTIONS_SPRITES = "potions_sprites.png";
     public static final String OBJECTS_SPRITES = "objects_sprites.png";
+    public static final String TRAP_ATLAS = "trap_atlas.png";
 
 
     // 关卡
@@ -118,6 +120,18 @@ public class LoadSave {
                 int value = color.getBlue();
                 if (value == RED_POTION || value == BLUE_POTION)
                     list.add(new Potion(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        }
+        return list;
+    }
+    public static ArrayList<Spike> GetSpikes(BufferedImage img) {
+        ArrayList<Spike> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++) {
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i,j));
+                int value = color.getBlue();
+                if (value == SPIKE)
+                    list.add(new Spike(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
             }
         }
         return list;
