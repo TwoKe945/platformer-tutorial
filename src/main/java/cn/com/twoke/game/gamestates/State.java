@@ -3,8 +3,6 @@ package cn.com.twoke.game.gamestates;
 import cn.com.twoke.game.audio.AudioPlayer;
 import cn.com.twoke.game.main.Game;
 import cn.com.twoke.game.ui.MenuButton;
-import javafx.scene.input.MouseButton;
-
 import java.awt.event.MouseEvent;
 
 public class State {

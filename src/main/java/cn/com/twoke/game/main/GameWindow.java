@@ -18,6 +18,7 @@ public class GameWindow  {
 //        jframe.setSize(1280, 800);
         jframe.setDefaultCloseOperation(EXIT_ON_CLOSE);
         jframe.add(gamePanel);
+        jframe.setTitle("平台游戏学习 v1.0");
         jframe.setResizable(false);
         jframe.pack();
         // 设置显示位置到屏幕中间,必须在pack后面设置
