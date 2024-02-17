@@ -142,6 +142,13 @@ public class Player extends Entity {
     }
 
     private void updateAttackBox() {
+        if (right && left) {
+            if (flipW == 1) {
+                attackBox.x = hitBox.x + hitBox.width + (int)(Game.SCALE * 10);
+            } else {
+                attackBox.x =  hitBox.x - hitBox.width - (int)(Game.SCALE * 10);
+            }
+        }
         if (right || (powerAttackActive && flipW == 1)) {
             attackBox.x = hitBox.x + hitBox.width + (int)(Game.SCALE * 10);
         } else if (left || (powerAttackActive && flipW == -1)) {
@@ -277,20 +284,20 @@ public class Player extends Entity {
 
         float xSpeed = 0;
 
-        if (left) {
+        if (left && !right) {
             xSpeed -= walkSpeed;
             flipX = width;
             flipW = -1;
         }
 
-        if (right) {
+        if (right && !left) {
             xSpeed += walkSpeed;
             flipX = 0;
             flipW = 1;
         }
 
         if (powerAttackActive) {
-            if (!left && !right) {
+            if ((!left && !right) || (left && right)) {
                 if (flipW == -1) {
                     xSpeed = -walkSpeed;
                 } else {
@@ -401,6 +408,7 @@ public class Player extends Entity {
         attacking = false;
         moving = false;
         state = IDLE;
+        airSpeed = 0f;
         currentHealth = maxHealth;
         powerValue = powerMaxValue;
 
